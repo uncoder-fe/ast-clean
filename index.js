@@ -6,6 +6,7 @@ import prettier from 'prettier';
 import * as parser from '@babel/parser';
 import traverse from '@babel/traverse';
 import generate from '@babel/generator';
+
 const t = require('@babel/types');
 
 const files = glob.sync("src/*.js", {
