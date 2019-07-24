@@ -1,4 +1,7 @@
 // 文档
+// https://astexplorer.net/
+// https://babeljs.io/docs/en/babel-types
+// https://github.com/babel/babel/tree/master/packages/babel-traverse
 // https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-traverse
 import fs from 'fs';
 import glob from 'glob';
