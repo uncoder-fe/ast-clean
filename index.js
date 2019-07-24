@@ -2,6 +2,7 @@
 // https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-traverse
 import fs from 'fs';
 import glob from 'glob';
+import prettier from 'prettier';
 import * as parser from '@babel/parser';
 import traverse from '@babel/traverse';
 import generate from '@babel/generator';
@@ -24,17 +25,21 @@ files.forEach(filePath => {
     });
     // console.log("ast", ast)
     const visitor = {
+        CallExpression(path) {
+            const { node } = path;
+            // console.log("CallExpression", node)
+        },
         Identifier(path) {
             const { node } = path;
-            console.log("node", node.name)
+            // console.log("Identifier", node.name)
             if (node && node.name === 'log') {
                 path.replaceWith(createMemberExpression());
                 path.stop();
             }
         },
         enter(path) {
+            // console.log("enter", path.remove, path.replaceWith)
             if (path.node.leadingComments) {
-                // console.log("comm", path.remove, path.replaceWith)
                 path.node.leadingComments.forEach(i => {
                     i.value = '';
                 });
@@ -51,8 +56,9 @@ files.forEach(filePath => {
         sourceMaps: true,
         sourceFileName: "index.map.js"
     });
+    const prettierCode = prettier.format(output.code, { semi: false, parser: "babel" });
     // console.log(output)
-    fs.writeFileSync('./build/index.js', output.code);
+    fs.writeFileSync('./build/index.js', prettierCode);
     fs.writeFileSync('./build/index.js.map', JSON.stringify(output.map));
 });
 
