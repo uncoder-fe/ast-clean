@@ -50,11 +50,11 @@ files.forEach(filePath => {
             const { node } = path;
             // console.log('VariableDeclaration', node);
             if (node.leadingComments || node.trailingComments || node.innerComments) {
-                path.node.leadingComments = null;
-                path.node.trailingComments = null;
-                path.node.innerComments = null;
+                node.leadingComments = null;
+                node.trailingComments = null;
+                node.innerComments = null;
                 // or
-                // t.removeComments(path.node)
+                // t.removeComments(node)
             }
         },
         exit(path) {
