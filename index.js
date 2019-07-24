@@ -25,6 +25,13 @@ files.forEach(filePath => {
     });
     // console.log("ast", ast)
     const visitor = {
+        enter(path) {
+            // console.log("enter", path)
+        },
+        ObjectMethod(path) {
+            const { node } = path;
+            // console.log("ObjectMethod", path)
+        },
         CallExpression(path) {
             const { node } = path;
             // console.log("CallExpression", node)
@@ -34,15 +41,19 @@ files.forEach(filePath => {
             // console.log("Identifier", node.name)
             if (node && node.name === 'log') {
                 path.replaceWith(createMemberExpression());
+                // 停止遍历
                 path.stop();
             }
         },
-        enter(path) {
-            // console.log("enter", path.remove, path.replaceWith)
-            if (path.node.leadingComments) {
-                path.node.leadingComments.forEach(i => {
-                    i.value = '';
-                });
+        VariableDeclaration(path) {
+            const { node } = path;
+            // console.log('VariableDeclaration', node);
+            if (node.leadingComments || node.trailingComments || node.innerComments) {
+                path.node.leadingComments = null;
+                path.node.trailingComments = null;
+                path.node.innerComments = null;
+                // or
+                // t.removeComments(path.node)
             }
         },
         exit(path) {
